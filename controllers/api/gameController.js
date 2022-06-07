@@ -91,7 +91,7 @@ module.exports = {
                     })
                 }
                 //IF ALREADY JOIN ROOM
-                //CHECK ROOM DATA USER
+                //CHECK IF DATA USER ALREADY ON ROOM
                 if (findRoom.p1_id == req.user.id || findRoom.p2_id == req.user.id ) {
                     return res.status(200).json({
                         id: req.user.id,
@@ -100,16 +100,18 @@ module.exports = {
                     })
                 }
                 //IF ROOM FULL
+                //IF P2_ID FIELD FULLFILED
                 if (findRoom.p2_id) {
                     return res.status(200).json({
                         room_name: findRoom.room_name,
                         msg: 'ROOM IS FULL'
                     })
                 }
-                //GET INPUT FROM PLAYER 2
+                //GET INPUT FROM PLAYER 2 TO JOIN A ROOM
                 const input = {
                     p2_id: req.user.id
                 }
+                //UPDATE P2_ID ON GAME_ROOM
                 await game_room.update(input, { where: { room_name: findRoom.room_name } })
                 .then( Result => {
                     res.status(200).json({
