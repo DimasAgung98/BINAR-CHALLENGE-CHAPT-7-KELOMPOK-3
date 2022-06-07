@@ -7,18 +7,23 @@ const router = express.Router();
 const indexController = require('../controllers/index'); 
 const gameController = require('../controllers/game');
 const usersController = require('../controllers/users');
-const auth = require('../controllers/api/authController');
+const authController = require('../controllers/api/authController');
 const restrict = require('../middleware/restrict');
+const gameroomController = require('../controllers/api/gameController')
 
 // ROUTE
 router.get('/', indexController.index);
 router.get('/game', gameController.index);
 router.get('/user', usersController.index);
+//LOGIN AND REGISTER ROUTE
+router.get('/', authController.index)
+router.post('/register', authController.register)
+router.post('/login', authController.login)
+router.post('/login-token', restrict, authController.loginToken)
+//GAME AND CREATE ROOM ROUTE
+router.post('/create-room', restrict, gameroomController.createRoom)
+router.post('/view-room/:id', gameroomController.viewRoom)
 
-router.get('/', auth.index)
-router.post('/register', auth.register)
-router.post('/login', auth.login)
-router.post('/login-token', restrict, auth.loginToken)
 
 //EXPORT MODULE ROUTER
 module.exports = router;

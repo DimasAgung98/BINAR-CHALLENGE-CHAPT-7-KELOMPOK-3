@@ -21,7 +21,7 @@ const data = (user) => {
 module.exports = {
     //INDEX PAGE FUNCTION
     index: (req, res) => {
-        res.status(200).send('Auth Controller')
+        res.status(200).send('Auth Page')
     },
     //REGISTER FUNCTION
     register: async (req, res) => {
@@ -52,6 +52,11 @@ module.exports = {
         game_user.authenticate(input)
             .then(user => {
                 res.status(200).json(data(user))
+            })
+            .catch((error) => {
+                res.status(401).json({
+                    msg: 'Login Failed, Check Your Password'
+                })
             })
     },
     //LOGIN TOKEN FUNCTION

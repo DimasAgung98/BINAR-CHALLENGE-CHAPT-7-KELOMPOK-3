@@ -23,11 +23,11 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "SET NULL",
       });
     }
-
+    //ENCRYPT METHOD USING BCRYPT
     static #encrypt(password) {
       return bcrypt.hashSync(password, 10)
     }
-
+    //ENCRYPT USER PASSWORD USING BCRYPT
     static register = async ({
       username,
       password
@@ -39,9 +39,9 @@ module.exports = (sequelize, DataTypes) => {
         asAdmin: false
       })
     }
-
+    //CHECK USER PASSWORD
     checkPassword = (password) => bcrypt.compareSync(password, this.password)
-    
+    //GENERATE TOKEN AFTER LOGIN USING JWT
     generateToken = () => {
       const payload = {
         id: this.id,
@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
       const token = jwt.sign(payload, secret)
       return token
     }
-    
+    //AUTHENTICATE USER
     static authenticate = async ({
       username,
       password
@@ -72,7 +72,8 @@ module.exports = (sequelize, DataTypes) => {
         return Promise.reject(error)
       }
     }
-  }
+  };
+  
   game_user.init({
     username: DataTypes.STRING,
     password: DataTypes.STRING,
