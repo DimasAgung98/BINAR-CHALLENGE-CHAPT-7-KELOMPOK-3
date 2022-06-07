@@ -1,4 +1,5 @@
 //IMPORT DB
+const { Result } = require('express-validator')
 const {
     game_user,
     game_history,
@@ -17,7 +18,7 @@ module.exports = {
                 //CHECK ROOM FULL OR NOT
                 if(roomExist) return res.status(200).json({
                     room_name: req.body.room_name,
-                    msg: 'Room is Full'
+                    msg: 'ROOM NAME ALREADY USED'
                 })
                 //PLAYER INPUT USING FK P1_ID ON DB
                 const playerInput = {
@@ -61,7 +62,7 @@ module.exports = {
         },
         // FUNCTION VIEW ROOM
         viewRoom: async (req, res) => {
-            try {
+            try {//FIND ROOM BY ID
                 const detail = await game_room.findOne({ where: { id: req.params.id }})
                 //CHECK ALREADY PLAYER ON ROOM
                 const player_detail = [
@@ -77,6 +78,50 @@ module.exports = {
                 res.status(200).json(player_detail)
             } catch (error) {
                 res.status(500).json('VIEW ROOM METHOD ERROR')
+            }
+        },
+        // FUNCTION JOIN ROOM
+        joinRoom: async(req, res) => {
+            try {
+                const findRoom = await game_room.findOne({ where: { room_name: req.body.room_name }})
+                // IF ROOM NOT EXIST
+                if(!findRoom) {
+                    return res.status(400).json({
+                        msg: 'ROOM NOT FOUND'
+                    })
+                }
+                //IF ALREADY JOIN ROOM
+                //CHECK ROOM DATA USER
+                if (findRoom.p1_id == req.user.id || findRoom.p2_id == req.user.id ) {
+                    return res.status(200).json({
+                        id: req.user.id,
+                        username: req.user.username,
+                        msg: 'YOU ALREADY JOIN THIS ROOM'
+                    })
+                }
+                //IF ROOM FULL
+                if (findRoom.p2_id) {
+                    return res.status(200).json({
+                        room_name: findRoom.room_name,
+                        msg: 'ROOM IS FULL'
+                    })
+                }
+                //GET INPUT FROM PLAYER 2
+                const input = {
+                    p2_id: req.user.id
+                }
+                await game_room.update(input, { where: { room_name: findRoom.room_name } })
+                .then( Result => {
+                    res.status(200).json({
+                        msg: 'JOIN SUCCESS'
+                    })
+                })
+            } catch (error) {
+                res.status(500).json(
+                    {
+                        msg: 'JOIN ROOM METHOD ERROR'
+                    }
+                )
             }
         }
     }
