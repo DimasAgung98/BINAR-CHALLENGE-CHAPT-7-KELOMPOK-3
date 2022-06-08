@@ -29,6 +29,7 @@ module.exports = {
             const input = {
                 username: req.body.username,
                 password: req.body.password,
+                asAdmin: req.body.asAdmin
             }
             await game_user.register(input)
                 .then((user) => {

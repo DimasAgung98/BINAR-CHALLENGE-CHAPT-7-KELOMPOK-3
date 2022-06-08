@@ -30,13 +30,14 @@ module.exports = (sequelize, DataTypes) => {
     //ENCRYPT USER PASSWORD USING BCRYPT
     static register = async ({
       username,
-      password
+      password,
+      asAdmin
     }) => {
       const encryptedPassword = this.#encrypt(password)
       return await this.create({
         username,
         password: encryptedPassword,
-        asAdmin: false
+        asAdmin
       })
     }
     //CHECK USER PASSWORD
