@@ -12,3 +12,4 @@ HOW TO RUN :
 9. `/create-room` to create a new room, input `room_name`
 10. `/join-room` to join a room by input the `room_name`
 11. Can view a room by id with `/view-room/:id`
+12.
