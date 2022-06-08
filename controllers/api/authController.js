@@ -3,7 +3,7 @@ const {
     game_user
 } = require('../../models');
 
-//SAVE DATA USER ON (user)
+//SAVE DATA USER ON VARIABLE (user)
 const data = (user) => {
     const {
         id,
