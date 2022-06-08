@@ -1,4 +1,4 @@
-CHALLENGE CHAPTER 7 GROUP 4
+CHALLENGE CHAPTER 7 GROUP 3
 
 HOW TO RUN :
 1. Install all module on package.json using `npm install`
