@@ -47,6 +47,7 @@ module.exports = (sequelize, DataTypes) => {
         id: this.id,
         username: this.username,
       }
+      //SET SECRET AND TOKEN USING JWT
       const secret = 'iniadalahpasswordtoken'
       const token = jwt.sign(payload, secret)
       return token

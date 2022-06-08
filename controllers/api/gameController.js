@@ -125,5 +125,10 @@ module.exports = {
                     }
                 )
             }
+        },
+        // FUNCTION GAME ROOM AND FIGHT
+        fightRoom: async (req, res) => {
+            //USER INPUT
+            
         }
     }
