@@ -58,14 +58,16 @@ module.exports = (sequelize, DataTypes) => {
       username,
       password
     }) => {
+      //FIND ONE USERNAME
       try {
         const dataUser = await this.findOne({
           where: {
             username
           }
         })
+        //IF USERNAME IN DATAUSER IS NOT FOUND
         if (!dataUser) return Promise.reject('User not found!')
-
+        //CHECK PASSWORD 
         const isPasswordValid = dataUser.checkPassword(password)
         if (!isPasswordValid) return Promise.reject('Wrong password!')
 
