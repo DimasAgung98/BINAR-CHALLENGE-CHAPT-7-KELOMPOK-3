@@ -1,5 +1,8 @@
 CHALLENGE CHAPTER 7 GROUP 3
 
+MAKE SURE YOU USE THIS SCHEMA ON DATABASE
+![db diagram](https://user-images.githubusercontent.com/99533724/173175455-fefb5fdc-6ee6-4a3a-b952-90c253330aa2.PNG)
+
 HOW TO RUN :
 1. Install all module on package.json using `npm install`
 2. See database name on `config.json`
