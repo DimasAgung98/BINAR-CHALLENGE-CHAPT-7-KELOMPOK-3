@@ -143,9 +143,10 @@ module.exports = {
     },
     // FUNCTION GAME ROOM AND FIGHT
     fightRoom: async (req, res) => {
+
         //USER INPUT ROCK PAPER SCISSORS
         try {
-            const input = {
+            var input = {
                 roomId: req.params.room_id,
                 user: req.user.id,
                 choose: req.body.choose
@@ -155,7 +156,7 @@ module.exports = {
                 where: {
                     room_id: input.roomId
                 },
-                attributes: ['p1_pick', 'p2_pick', 'round', 'round_winner']
+                attributes: ['round', 'round_winner', 'p1_pick', 'p2_pick']
             })
             //SORTING THE ROUND
             dataGame.sort((a, b) => a.round - b.round)
@@ -170,7 +171,7 @@ module.exports = {
                     //IF PLAYER 2 WIN
                 } else if (game.round_winner == 2) {
                     round_winner = 'Player 2'
-                    //DEFAULT VALUE IF USER NOT PICK 
+                    //DEFAULT VALUE IF USER NOT PICK
                 } else {
                     round_winner = null
                 }
@@ -192,7 +193,6 @@ module.exports = {
                 gameHistory: findGame,
             }
             // END OF FUNCTION GAME ROOM AND FIGHT
-
             // ROUND CHECKER FOR 3 ROUND
             if (findRoom.p1_id == input.user) gameResult.yourRole = 1
             else gameResult.yourRole = 2
@@ -223,9 +223,11 @@ module.exports = {
                     },
                     attributes: ['round', 'round_winner']
                 })
+
                 //DEFAULT SCORE VALUE
                 var p1_win = 0
                 var p2_win = 0
+
                 //INCREASE SCORE AFTER WINNING A 1 ROUND OF GAME
                 scoreResult.forEach(scoreResult => {
                     if (scoreResult.round_winner == 1) {
@@ -234,7 +236,7 @@ module.exports = {
                         p2_win = p2_win + 1
                     }
                 })
-                //CONDITION 
+                //CONDITION
                 if (p1_win == p2_win) {
                     finalResult.notification = `GAME IS DRAW`
                 } else if (p1_win > p2_win) {
@@ -244,7 +246,6 @@ module.exports = {
                 }
                 return res.status(200).json(finalResult)
             }
-
             //USER INPUT THE GAME CHOICE
             //USER CAN INPUT LOWERCASE OR UPPERCASE LETTER
             if (!(input.choose == 'R' || input.choose == 'P' || input.choose == 'S' || input.choose == 'r' || input.choose == 'p' || input.choose == 's')) {
@@ -275,6 +276,7 @@ module.exports = {
                     yourRole: player,
                     gameHistory: findGame,
                 })
+
             }
             //CHECK OTHER PLAYER PICK
             if (result.yourRole == 2 && result.gameHistory[result.onGoingRound - 1].p2_pick != null) {
@@ -309,7 +311,6 @@ module.exports = {
                     }
                 })
             }
-
             //DATA RESULT OF THE GAME
             const resultDataGame = await game_history.findAll({
                 where: {
@@ -326,11 +327,9 @@ module.exports = {
                 yourRole: result.yourRole,
                 gameHistory: resultDataGame
             }
-
             //
             if (resultDataGame[finalGameResult.round - 1].p1_pick && resultDataGame[finalGameResult.round - 1].p2_pick) {
-                if (resultDataGame[finalGameResult.round - 1].p1_pick == resultDataGame[finalGameResult.round - 1].p2_pick)
-                {
+                if (resultDataGame[finalGameResult.round - 1].p1_pick == resultDataGame[finalGameResult.round - 1].p2_pick) {
                     await game_history.update({
                         round_winner: 0
                     }, {
@@ -363,15 +362,11 @@ module.exports = {
                     }
                 }
             }
-
-            return res.status(200).json(finalGameResult)
-
+            return res.status(200).json(result1)
         } catch (error) {
             res.status(500).json({
                 msg: 'FIGHT METHOD IS ERROR'
             })
-
         }
-
     }
 }

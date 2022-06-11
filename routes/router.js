@@ -23,9 +23,8 @@ router.post('/login-token', restrict, authController.loginToken);
 //GAME AND CREATE ROOM ROUTE
 router.post('/create-room', restrict, gameroomController.createRoom);
 router.post('/join-room', restrict, gameroomController.joinRoom);
-router.post('/view-room/:id', gameroomController.viewRoom);
 router.post('/fight/:room_id', restrict, gameroomController.fightRoom);
-
+router.post('/view-room/:id', gameroomController.viewRoom);
 
 //EXPORT MODULE ROUTER
 module.exports = router;
