@@ -143,7 +143,6 @@ module.exports = {
     },
     // FUNCTION GAME ROOM AND FIGHT
     fightRoom: async (req, res) => {
-
         //USER INPUT ROCK PAPER SCISSORS
         try {
             var input = {
@@ -171,7 +170,7 @@ module.exports = {
                     //IF PLAYER 2 WIN
                 } else if (game.round_winner == 2) {
                     round_winner = 'Player 2'
-                    //DEFAULT VALUE IF USER NOT PICK
+                    //DEFAULT VALUE IF USER NOT PICK 
                 } else {
                     round_winner = null
                 }
@@ -193,6 +192,7 @@ module.exports = {
                 gameHistory: findGame,
             }
             // END OF FUNCTION GAME ROOM AND FIGHT
+
             // ROUND CHECKER FOR 3 ROUND
             if (findRoom.p1_id == input.user) gameResult.yourRole = 1
             else gameResult.yourRole = 2
@@ -213,43 +213,46 @@ module.exports = {
                 var finalResult = {
                     roomId: input.roomId,
                     roomname: findRoom.room_name,
-                    notification: 'GAME IS OVER, THE WINNER IS',
+                    notification: 'GAME IS OVER, THE WINNER IS ',
                     gameHistory: findGame
                 }
                 //GAME SCORE
-                const scoreResult = await game_history.findAll({
+                const scoreResults = await game_history.findAll({
                     where: {
                         room_id: input.roomId
                     },
                     attributes: ['round', 'round_winner']
                 })
-
                 //DEFAULT SCORE VALUE
                 var p1_win = 0
                 var p2_win = 0
-
                 //INCREASE SCORE AFTER WINNING A 1 ROUND OF GAME
-                scoreResult.forEach(scoreResult => {
+                scoreResults.forEach(scoreResult => {
                     if (scoreResult.round_winner == 1) {
                         p1_win = p1_win + 1
                     } else if (scoreResult.round_winner == 2) {
                         p2_win = p2_win + 1
                     }
                 })
-                //CONDITION
+                //CONDITION GAME
+                //WHEN PLAYER 1 and PLAYER 2 GET THE SAME SCORE
                 if (p1_win == p2_win) {
                     finalResult.notification = `GAME IS DRAW`
+                //WHEN PLAYER 1 HAS A HIGHER SCORE THAN PLAYER 2
                 } else if (p1_win > p2_win) {
                     finalResult.notification = finalResult.notification + 'PLAYER 1'
+                //WHEN PLAYER 2 HAS A HIGHER SCORE THAN PLAYER 1
                 } else {
                     finalResult.notification = finalResult.notification + 'PLAYER 2'
                 }
                 return res.status(200).json(finalResult)
             }
+
             //USER INPUT THE GAME CHOICE
             //USER CAN INPUT LOWERCASE OR UPPERCASE LETTER
+            // 'R' : ROCK 'P' : PAPER 'S' : SCISSORS 
             if (!(input.choose == 'R' || input.choose == 'P' || input.choose == 'S' || input.choose == 'r' || input.choose == 'p' || input.choose == 's')) {
-                var result = {
+                var gameResult = {
                     roomId: input.roomId,
                     roomName: findRoom.room_name,
                     onGoingRound: 0,
@@ -257,34 +260,33 @@ module.exports = {
                     warning: `PLEASE MAKE SURE YOU CHOOSE R (rock) or P (paper) or S (scissor)`,
                     gameHistory: findGame,
                 }
-                return res.status(200).json(result)
+                return res.status(200).json(gameResult)
             }
             //MAKE A LOWERCASE ON JSON CONVERT TO UPPERCASE
-            if (input.choose == 'r' || input.choose == 's' || input.choose == 'p') {
+            if (input.choose == 'r' || input.choose == 'p' || input.choose == 's') {
                 const converted = input.choose.toUpperCase()
                 input.choose = converted
             }
             //TURN OF PICK
-            const player = result.yourRole
+            const player = gameResult.yourRole
             //CHECK OTHER PLAYER PICK
-            if (result.yourRole == 1 && result.gameHistory[result.onGoingRound - 1].p1_pick != null) {
+            if (gameResult.yourRole == 1 && gameResult.gameHistory[gameResult.onGoingRound - 1].p1_pick != null) {
                 return res.status(200).json({
                     roomId: input.roomId,
                     roomName: findRoom.room_name,
                     warning: `WAIT YOUR OPPONENT CHOOSE`,
-                    onGoingRound: result.onGoingRound,
+                    onGoingRound: gameResult.onGoingRound,
                     yourRole: player,
                     gameHistory: findGame,
                 })
-
             }
             //CHECK OTHER PLAYER PICK
-            if (result.yourRole == 2 && result.gameHistory[result.onGoingRound - 1].p2_pick != null) {
+            if (gameResult.yourRole == 2 && gameResult.gameHistory[gameResult.onGoingRound - 1].p2_pick != null) {
                 return res.status(200).json({
                     roomId: input.roomId,
                     roomName: findRoom.room_name,
                     warning: "WAIT YOUR OPPONENT CHOOSE",
-                    onGoingRound: result.onGoingRound,
+                    onGoingRound: gameResult.onGoingRound,
                     yourRole: player,
                     gameHistory: findGame
                 })
@@ -297,7 +299,7 @@ module.exports = {
                 }, {
                     where: {
                         room_id: input.roomId,
-                        round: result.onGoingRound
+                        round: gameResult.onGoingRound
                     }
                 })
                 //P2 UPDATE
@@ -307,10 +309,11 @@ module.exports = {
                 }, {
                     where: {
                         room_id: input.roomId,
-                        round: result.onGoingRound
+                        round: gameResult.onGoingRound
                     }
                 })
             }
+
             //DATA RESULT OF THE GAME
             const resultDataGame = await game_history.findAll({
                 where: {
@@ -318,16 +321,18 @@ module.exports = {
                 },
                 attributes: ['round', 'p1_pick', 'p2_pick']
             })
+
             //SORTING ROUND 1,2,and 3
-            resultDataGame.sort((a, b) => a.round = b.round)
+            resultDataGame.sort((a, b) => a.round - b.round)
             var finalGameResult = {
                 roomId: input.roomId,
                 roomName: findRoom.room_name,
-                round: result.onGoingRound,
-                yourRole: result.yourRole,
+                round: gameResult.onGoingRound,
+                yourRole: gameResult.yourRole,
                 gameHistory: resultDataGame
             }
-            //
+
+            //CREATE ROUND_WINNER AFTER P1 AND P2 FIGHT 3 TIMES BASED ON SCORE
             if (resultDataGame[finalGameResult.round - 1].p1_pick && resultDataGame[finalGameResult.round - 1].p2_pick) {
                 if (resultDataGame[finalGameResult.round - 1].p1_pick == resultDataGame[finalGameResult.round - 1].p2_pick) {
                     await game_history.update({
@@ -335,7 +340,7 @@ module.exports = {
                     }, {
                         where: {
                             room_id: input.roomId,
-                            round: result.onGoingRound
+                            round: gameResult.onGoingRound
                         }
                     })
                 } else {
@@ -347,7 +352,7 @@ module.exports = {
                         }, {
                             where: {
                                 room_id: input.roomId,
-                                round: result.onGoingRound
+                                round: gameResult.onGoingRound
                             }
                         })
                     } else {
@@ -356,13 +361,15 @@ module.exports = {
                         }, {
                             where: {
                                 room_id: input.roomId,
-                                round: result.onGoingRound
+                                round: gameResult.onGoingRound
                             }
                         })
                     }
                 }
             }
-            return res.status(200).json(result1)
+            //SHOW DATA FROM FINALGAMERESULT
+            return res.status(200).json(finalGameResult)
+            //ERROR CHECKER
         } catch (error) {
             res.status(500).json({
                 msg: 'FIGHT METHOD IS ERROR'
