@@ -20,7 +20,7 @@ router.get('/', authController.index);
 router.post('/register', authController.register);
 router.post('/login', authController.login);
 router.post('/login-token', restrict, authController.loginToken);
-//GAME AND CREATE ROOM ROUTE
+//FIGHT AND CREATE ROOM ROUTE
 router.post('/create-room', restrict, gameroomController.createRoom);
 router.post('/join-room', restrict, gameroomController.joinRoom);
 router.post('/fight/:room_id', restrict, gameroomController.fightRoom);
