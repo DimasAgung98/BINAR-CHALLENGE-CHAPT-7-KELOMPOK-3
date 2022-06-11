@@ -302,7 +302,7 @@ module.exports = {
                         round: gameResult.onGoingRound
                     }
                 })
-                //P2 UPDATE
+            //P2 UPDATE
             } else {
                 await game_history.update({
                     p2_pick: input.choose
