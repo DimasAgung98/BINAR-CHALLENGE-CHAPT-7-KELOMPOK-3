@@ -93,11 +93,11 @@ module.exports = {
     //VIEW ALL ROOM
     viewAllRoom: async (req, res) => {
         const listroom = await game_room.findAll({
-            attributes: ['id', 'room_name']
-        })
-        .then(listroom => {
-            res.send(listroom)
-        })
+                attributes: ['id', 'room_name']
+            })
+            .then(listroom => {
+                res.send(listroom)
+            })
     },
 
     // FUNCTION JOIN ROOM
@@ -247,12 +247,12 @@ module.exports = {
                 //WHEN PLAYER 1 and PLAYER 2 GET THE SAME SCORE
                 if (p1_win == p2_win) {
                     finalResult.notification = `GAME IS DRAW`
-                //WHEN PLAYER 1 HAS A HIGHER SCORE THAN PLAYER 2
+                    //WHEN PLAYER 1 HAS A HIGHER SCORE THAN PLAYER 2
                 } else if (p1_win > p2_win) {
-                    finalResult.notification = finalResult.notification + 'PLAYER 1'
-                //WHEN PLAYER 2 HAS A HIGHER SCORE THAN PLAYER 1
+                    finalResult.notification = finalResult.notification + 'PLAYER 1 WITH' + `ID : ${req.user.id}`+ ' ' + `username : ${req.user.username}`.toUpperCase();
+                    //WHEN PLAYER 2 HAS A HIGHER SCORE THAN PLAYER 1
                 } else {
-                    finalResult.notification = finalResult.notification + 'PLAYER 2'
+                    finalResult.notification = finalResult.notification + 'PLAYER 2 WITH' + ' ' + `ID : ${req.user.id}`+ ' ' + `username : ${req.user.username}`.toUpperCase();
                 }
                 return res.status(200).json(finalResult)
             }
@@ -311,7 +311,7 @@ module.exports = {
                         round: gameResult.onGoingRound
                     }
                 })
-            //P2 UPDATE
+                //P2 UPDATE
             } else {
                 await game_history.update({
                     p2_pick: input.choose
