@@ -15,6 +15,7 @@ const gameroomController = require('../controllers/api/gameController');
 router.get('/', indexController.index);
 router.get('/game', gameController.index);
 router.get('/user', usersController.index);
+router.get('/view-room', gameroomController.viewAllRoom);
 //LOGIN AND REGISTER ROUTE
 router.get('/', authController.index);
 router.post('/register', authController.register);
