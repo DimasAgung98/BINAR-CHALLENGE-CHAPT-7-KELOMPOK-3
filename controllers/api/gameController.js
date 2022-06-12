@@ -86,7 +86,7 @@ module.exports = {
             ]
             res.status(200).json(player_detail)
         } catch (error) {
-            res.status(500).json('VIEW ROOM METHOD ERROR')
+            res.status(500).json('ROOM NOT FOUND')
         }
     },
     // FUNCTION JOIN ROOM
@@ -211,8 +211,6 @@ module.exports = {
             //IF PLAYER ALREADY INPUT 3 TIMES GAMES
             else {
                 var finalResult = {
-                    roomId: input.roomId,
-                    roomname: findRoom.room_name,
                     notification: 'GAME IS OVER, THE WINNER IS ',
                     gameHistory: findGame
                 }
