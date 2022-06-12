@@ -222,8 +222,8 @@ module.exports = {
             //IF PLAYER ALREADY INPUT 3 TIMES GAMES
             else {
                 var finalResult = {
+                    room_name: findRoom.room_name,
                     notification: 'GAME IS OVER, THE WINNER IS ',
-                    gameHistory: findGame
                 }
                 //GAME SCORE
                 const scoreResults = await game_history.findAll({
