@@ -223,7 +223,7 @@ module.exports = {
             else {
                 var finalResult = {
                     room_name: findRoom.room_name,
-                    notification: 'GAME IS OVER, THE WINNER IS ',
+                    notification: 'GAME IS OVER, THE WINNER IS ' + `ID : ${req.user.id}`+ ' ' + `username : ${req.user.username}`.toUpperCase()
                 }
                 //GAME SCORE
                 const scoreResults = await game_history.findAll({
@@ -249,10 +249,10 @@ module.exports = {
                     finalResult.notification = `GAME IS DRAW`
                     //WHEN PLAYER 1 HAS A HIGHER SCORE THAN PLAYER 2
                 } else if (p1_win > p2_win) {
-                    finalResult.notification = finalResult.notification + 'PLAYER 1 WITH' + `ID : ${req.user.id}`+ ' ' + `username : ${req.user.username}`.toUpperCase();
+                    finalResult.notification = finalResult.notification
                     //WHEN PLAYER 2 HAS A HIGHER SCORE THAN PLAYER 1
                 } else {
-                    finalResult.notification = finalResult.notification + 'PLAYER 2 WITH' + ' ' + `ID : ${req.user.id}`+ ' ' + `username : ${req.user.username}`.toUpperCase();
+                    finalResult.notification = finalResult.notification
                 }
                 return res.status(200).json(finalResult)
             }
