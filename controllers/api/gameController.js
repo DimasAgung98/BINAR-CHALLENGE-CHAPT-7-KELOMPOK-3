@@ -223,7 +223,8 @@ module.exports = {
             else {
                 var finalResult = {
                     room_name: findRoom.room_name,
-                    notification: 'GAME IS OVER, THE WINNER IS '
+                    notification: 'GAME IS OVER, THE WINNER IS ',
+                    gameHistory: findGame
                 }
                 //GAME SCORE
                 const scoreResults = await game_history.findAll({
@@ -243,16 +244,29 @@ module.exports = {
                         p2_win = p2_win + 1
                     }
                 })
+
+                //THE WINNER NOTIFICATIONS
+                //FOR PLAYER 1
+                const player1_win = await game_user.findOne({
+                    where: { id: findRoom.p1_id},
+                    attributes : [ 'id', 'username']
+                })
+                //FOR PLAYER 2
+                const player2_win = await game_user.findOne({
+                    where: { id: findRoom.p2_id},
+                    attributes : [ 'id', 'username']
+                })
+
                 //CONDITION GAME
                 //WHEN PLAYER 1 and PLAYER 2 GET THE SAME SCORE
                 if (p1_win == p2_win) {
                     finalResult.notification = `GAME IS DRAW`
                     //WHEN PLAYER 1 HAS A HIGHER SCORE THAN PLAYER 2
                 } else if (p1_win > p2_win) {
-                    finalResult.notification = finalResult.notification + 'PLAYER 1'
+                    finalResult.notification = finalResult.notification + 'PLAYER 1 ' + 'WITH ' + 'ID: ' + player1_win.id + ` AND USERNAME: `+ player1_win.username.toUpperCase()
                     //WHEN PLAYER 2 HAS A HIGHER SCORE THAN PLAYER 1
                 } else {
-                    finalResult.notification = finalResult.notification + 'PLAYER 2'
+                    finalResult.notification = finalResult.notification + 'PLAYER 2 ' + 'WITH ' + 'ID: ' + player2_win.id + ` AND USERNAME: `+ player2_win.username.toUpperCase()
                 }
                 return res.status(200).json(finalResult)
             }
@@ -264,10 +278,7 @@ module.exports = {
                 var gameResult = {
                     roomId: input.roomId,
                     roomName: findRoom.room_name,
-                    onGoingRound: 0,
-                    yourRole: 0,
                     warning: `PLEASE MAKE SURE YOU CHOOSE R (rock) or P (paper) or S (scissor)`,
-                    gameHistory: findGame,
                 }
                 return res.status(200).json(gameResult)
             }
@@ -281,23 +292,17 @@ module.exports = {
             //CHECK OTHER PLAYER PICK
             if (gameResult.yourRole == 1 && gameResult.gameHistory[gameResult.onGoingRound - 1].p1_pick != null) {
                 return res.status(200).json({
-                    roomId: input.roomId,
-                    roomName: findRoom.room_name,
-                    warning: `WAIT YOUR OPPONENT CHOOSE`,
                     onGoingRound: gameResult.onGoingRound,
                     yourRole: player,
-                    gameHistory: findGame,
+                    warning: `WAIT YOUR OPPONENT CHOOSE`,
                 })
             }
             //CHECK OTHER PLAYER PICK
             if (gameResult.yourRole == 2 && gameResult.gameHistory[gameResult.onGoingRound - 1].p2_pick != null) {
                 return res.status(200).json({
-                    roomId: input.roomId,
-                    roomName: findRoom.room_name,
                     warning: "WAIT YOUR OPPONENT CHOOSE",
                     onGoingRound: gameResult.onGoingRound,
                     yourRole: player,
-                    gameHistory: findGame
                 })
             }
             //PLAYER PICK UPDATE TO GAME_HISTORY DB
