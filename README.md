@@ -3,6 +3,24 @@ CHALLENGE CHAPTER 7 GROUP 3
 MAKE SURE YOU USE THIS SCHEMA ON DATABASE
 ![db diagram](https://user-images.githubusercontent.com/99533724/173175455-fefb5fdc-6ee6-4a3a-b952-90c253330aa2.PNG)
 
+MODUL :
+1. bcrypt
+2. cookie-parser
+3. ejs
+4. express
+5. express-flash
+6. express-session
+7. express-validation
+8. express-validator
+9. jsonwebtoken
+10. morgan
+11. nodemon
+12. passport
+13. passport-jwt
+14. passport-local
+15. pg
+16. sequelize
+
 HOW TO RUN :
 1. Install all module on package.json using `npm install`
 2. See database name on `config.json`
