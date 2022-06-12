@@ -300,9 +300,9 @@ module.exports = {
             //CHECK OTHER PLAYER PICK
             if (gameResult.yourRole == 2 && gameResult.gameHistory[gameResult.onGoingRound - 1].p2_pick != null) {
                 return res.status(200).json({
-                    warning: "WAIT YOUR OPPONENT CHOOSE",
                     onGoingRound: gameResult.onGoingRound,
                     yourRole: player,
+                    warning: "WAIT YOUR OPPONENT CHOOSE",
                 })
             }
             //PLAYER PICK UPDATE TO GAME_HISTORY DB
