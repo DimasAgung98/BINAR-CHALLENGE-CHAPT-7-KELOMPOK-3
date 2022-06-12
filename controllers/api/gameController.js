@@ -89,6 +89,17 @@ module.exports = {
             res.status(500).json('ROOM NOT FOUND')
         }
     },
+
+    //VIEW ALL ROOM
+    viewAllRoom: async (req, res) => {
+        const listroom = await game_room.findAll({
+            attributes: ['id', 'room_name']
+        })
+        .then(listroom => {
+            res.send(listroom)
+        })
+    },
+
     // FUNCTION JOIN ROOM
     joinRoom: async (req, res) => {
         try {
