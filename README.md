@@ -37,6 +37,6 @@ HOW TO RUN :
 10. `room_name` must be unique
 11. `/join-room` to join a room by input the `room_name` use string to write it
 12. `view-room` to see all already room
-12. Can view a room by id with `/view-room/:id` this API to view who player already in room
-13. Fight room can be open at `/fight/:room_id` example `localhost:8000/fight/1`
-14. User or Player can input `choose: R || P || S` on json (uppercase or lowercase is allowed)
+13. Can view a room by id with `/view-room/:id` this API to view who player already in room
+14. Fight room can be open at `/fight/:room_id` example `localhost:8000/fight/1`
+15. User or Player can input `choose: R || P || S` on json (uppercase or lowercase is allowed)
